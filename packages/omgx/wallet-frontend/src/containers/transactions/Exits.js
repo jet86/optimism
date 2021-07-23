@@ -31,11 +31,11 @@ import * as styles from './Transactions.module.scss'
 const PER_PAGE = 8;
 
 function Exits ({ searchHistory, transactions,chainLink }) {
-  
+
   const [ page, setPage ] = useState(1);
   const [ processExitModal, setProcessExitModal ] = useState(false);
-  
-  const loading = useSelector(selectLoading([ 'EXIT/GETALL' ]));  
+
+  const loading = useSelector(selectLoading([ 'EXIT/GETALL' ]));
 
   const _exits = transactions.filter(i => {
     return i.hash.includes(searchHistory) && (
@@ -51,19 +51,19 @@ function Exits ({ searchHistory, transactions,chainLink }) {
   const renderExits = _exits.map((i, index) => {
 
     const metaData = typeof(i.typeTX) === 'undefined' ? '' : i.typeTX
-    
+
     let tradExit = false
     let isExitable = false
     let midTitle = 'Swapped: ' + moment.unix(i.timeStamp).format('lll')
-    
+
     const to = i.to.toLowerCase()
-        
+
     //are we dealing with a traditional exit?
     if(to === networkService.L2StandardBridgeAddress.toLowerCase()) {
-      
+
       tradExit = true
       isExitable = moment().isAfter(moment.unix(i.crossDomainMessageEstimateFinalizedTime))
-      
+
       if(isExitable) {
         midTitle = 'Ready to exit - initiated:' + moment.unix(i.timeStamp).format('lll')
       } else {
