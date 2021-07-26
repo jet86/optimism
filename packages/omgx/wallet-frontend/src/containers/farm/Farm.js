@@ -1,5 +1,5 @@
 /*
-  Utility Functions for OMG Plasma 
+  Utility Functions for OMG Plasma
   Copyright (C) 2021 Enya Inc. Palo Alto, CA
 
   This program is free software: you can redistribute it and/or modify
@@ -30,26 +30,26 @@ import TESTLogo from 'images/test.svg';
 import * as styles from './Farm.module.scss';
 
 class Farm extends React.Component {
-  
+
   constructor(props) {
 
     super(props);
 
-    const { 
-      totalFeeRate, 
+    const {
+      totalFeeRate,
       userRewardFeeRate,
-      poolInfo, 
+      poolInfo,
       userInfo,
     } = this.props.farm;
 
-    const { 
+    const {
       layer1, layer2
     } = this.props.balance;
 
     this.state = {
-      totalFeeRate, 
+      totalFeeRate,
       userRewardFeeRate,
-      poolInfo, 
+      poolInfo,
       userInfo,
       layer1,
       layer2
@@ -69,12 +69,12 @@ class Farm extends React.Component {
 
   componentDidUpdate(prevState) {
 
-    const { 
+    const {
       totalFeeRate, userRewardFeeRate,
       poolInfo, userInfo,
     } = this.props.farm
 
-    const { 
+    const {
       layer1, layer2
     } = this.props.balance
 
@@ -108,7 +108,7 @@ class Farm extends React.Component {
   getBalance(address, chain) {
 
     const { layer1, layer2 } = this.state;
-  
+
     if(typeof(layer1) === 'undefined') return [0, 0]
     if(typeof(layer2) === 'undefined') return [0, 0]
 
@@ -119,7 +119,7 @@ class Farm extends React.Component {
           return [tokens[i][1].balance, tokens[i][1].decimals]
         }
       }
-    } 
+    }
     else if (chain === 'L2') {
       let tokens = Object.entries(layer2)
       for(let i = 0; i < tokens.length; i++) {
@@ -127,14 +127,14 @@ class Farm extends React.Component {
           return [tokens[i][1].balance, tokens[i][1].decimals]
         }
       }
-    } 
-   
+    }
+
     return [0,0]
 
   }
 
   render() {
-    const { 
+    const {
       // Pool
       poolInfo,
       // user
@@ -145,19 +145,19 @@ class Farm extends React.Component {
       <div className={styles.Farm}>
         <h2>Stake tokens to the liquidity pool to earn</h2>
         <div className={styles.Note}>
-          Your tokens will be deposited into the liquidity pool. 
+          Your tokens will be deposited into the liquidity pool.
           You will share the fees collected from the swap users.
         </div>
         <h3>L1 Liquidity Pool</h3>
         <div className={styles.TableContainer}>
           {Object.keys(poolInfo.L1LP).map((v, i) => {
             if (!Object.values(poolInfo.L1LP[v]).length) {
-              return <></>;
+              return null
             }
             const isETH = poolInfo.L1LP[v].isETH;
             const ret = this.getBalance(v, 'L1')
             return (
-              <ListFarm 
+              <ListFarm
                 key={i}
                 logo={isETH ? ethLogo : TESTLogo}
                 name={isETH ? "Ethereum" : "TEST"}
@@ -175,12 +175,12 @@ class Farm extends React.Component {
         <div className={styles.TableContainer}>
           {Object.keys(poolInfo.L2LP).map((v, i) => {
             if (!Object.values(poolInfo.L2LP[v]).length) {
-              return <></>;
+              return null
             }
             const isETH = poolInfo.L2LP[v].isETH;
             const ret = this.getBalance(v, 'L2')
             return (
-              <ListFarm 
+              <ListFarm
                 key={i}
                 logo={isETH ? ethLogo : TESTLogo}
                 name={isETH ? "Ethereum" : "TEST"}
@@ -199,7 +199,7 @@ class Farm extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({ 
+const mapStateToProps = state => ({
   farm: state.farm,
   balance: state.balance
 });
